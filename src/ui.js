@@ -32,11 +32,11 @@ export const ELEM = (()=>{
 })();
 
 export function Clock(){
-    return ELEM.create("div", [ELEM.create("div", "00", "time")], "clock");
+    return ELEM.create("div", [ELEM.create("div", "20", "time")], "clock");
 }
 
 export function Buttons(){
-    return ELEM.create("div", [ELEM.create("button", "POMO", "pomo-btn"), ELEM.create("button", "BREAK", "break-btn")], "buttons");
+    return ELEM.create("div", [ELEM.create("button", "POMO", ["pomo-btn"]), ELEM.create("button", "BREAK", ["break-btn"])], ["buttons"]);
 }
 
 export function Progress(){
@@ -45,4 +45,8 @@ export function Progress(){
         content.push(ELEM.create("div", null, ["progress-bar"]));
     }
     return ELEM.create("div", content, "progress");
+}
+
+export function Alarm(){
+    return ELEM.create("div", [ELEM.create("h1", "Hurray!"), ELEM.create("h3", "You completed a focus session"), Buttons()], "alarm");
 }

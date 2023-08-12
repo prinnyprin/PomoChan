@@ -1,17 +1,20 @@
 import './style.css';
-import { ELEM, Clock, Buttons, Progress } from './ui';
+import { ELEM, Clock, Buttons, Progress, Alarm } from './ui';
 
 /*SETUP*/
 let main = ELEM.get("main");
-ELEM.add(main, [Clock(), Progress(), Buttons()]);
+ELEM.add(main, [Clock(), Progress(), Buttons(), Alarm()]);
+let alarmBox = ELEM.get("#alarm");
 
 /*TIMER*/
 export const Timer = (timeTotal, ui, bars) => {
     var timeElapsed = 0;
     var actualTime = timeTotal / 60;
-    console.log(actualTime);
+    var done = false;
+    var audio = new Audio("ContenderTrackTribe.mp3");
     var timer;
     const startTimer= () =>{
+        done = false;
         timer = setInterval(()=>{
             if(timeElapsed === timeTotal-1){
                 stopTimer();
@@ -34,46 +37,63 @@ export const Timer = (timeTotal, ui, bars) => {
                     bar.style.backgroundColor = "transparent";
                 })
             }
-            bars[i].style.backgroundColor = "rgb(160, 98, 119)";
+            if(!done){bars[i].style.backgroundColor = "rgb(160, 98, 119)";}
         }
     }
     const setUI = () => {
         if(timeElapsed < 60){ui.innerHTML = actualTime; setSecs(false);}
         else{
             let val = actualTime - Math.floor(timeElapsed/60);
-            (val < 10) ? ui.innerHTML = "0" + val : ui.innerHTML = val;
+            ui.innerHTML = val;
+            if(val == 0){alarm(true);}
             setSecs(true);
         }
     }
-    return {timeTotal, startTimer, stopTimer, setSecs};
+    function alarm(on){
+        if(on){
+            done = true;
+            stopTimer();
+            alarmBox.style.display = "flex";
+            audio.play();
+        }
+        else{
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    }
+    return {timeTotal, startTimer, stopTimer, setSecs, actualTime, alarm};
 }
 
 /*EVENTS*/
-let pomoBtn = ELEM.get("#pomo-btn");
+let pomoBtn = ELEM.getAll(".pomo-btn");
 let timeUI = ELEM.get("#time");
 let progressBars = ELEM.getAll(".progress-bar");
-let timer = Timer(20*60, timeUI, progressBars);
+let timer = Timer(1*60, timeUI, progressBars);
 let pomo = false;
 let brek = false;
 
+
+
 function setPomo(){
     if(!pomo){
-        pomoBtn.innerHTML = "STOP";
-        timeUI.innerHTML = "20";
         timer.setSecs(true);
         timer.startTimer();
+        pomoBtn[0].innerHTML = "STOP";
         pomo = true;
     }
     else{
-        pomoBtn.innerHTML = "POMO";
+        pomoBtn[0].innerHTML = "POMO";
         timer.stopTimer();
         pomo = false;
     }
 }
 
-pomoBtn.addEventListener("click", ()=>{
+pomoBtn[0].addEventListener("click", ()=>{
     setPomo();
 });
 
-
-
+pomoBtn[1].addEventListener("click", ()=>{
+    alarmBox.style.display = "none";
+    timer.alarm(false);
+    setPomo();
+});

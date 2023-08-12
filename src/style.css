@@ -34,11 +34,11 @@ main{
     font-size: 60px;
 }
 
-#buttons{
+.buttons{
     width: 300px;
     display: flex; justify-content: space-around; align-items: center;
 }
-#buttons button{
+.buttons button{
     background-color: rgb(160, 98, 119); color: white;
     width: 120px; height: 30px;
 }
@@ -54,6 +54,17 @@ main{
     height: 20px; width: 8px;
     border: 1px solid rgb(160, 98, 119);
     border-radius: 10px;
+}
+
+#alarm{
+    height: 500px; width: 500px;
+    position: absolute;
+    margin-top: -40px;
+    border: 9px ridge rgb(225, 162, 183);
+    display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;
+    text-align: center; color: rgb(160, 98, 119);
+    background-color: rgb(252, 240, 244);
+    display: none;
 }
 
 footer{
