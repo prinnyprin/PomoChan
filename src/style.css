@@ -43,6 +43,19 @@ main{
     width: 120px; height: 30px;
 }
 
+#progress{
+    height: 30px;
+    display: flex; justify-content: center; align-items: center; 
+    gap: 4px; padding: 0 4px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.progress-bar{
+    height: 20px; width: 8px;
+    border: 1px solid rgb(160, 98, 119);
+    border-radius: 10px;
+}
+
 footer{
     height: 40px; width: 100%;
     display: flex; justify-content: center; align-items: center; text-align: center;

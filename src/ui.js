@@ -32,9 +32,17 @@ export const ELEM = (()=>{
 })();
 
 export function Clock(){
-    return ELEM.create("div", [ELEM.create("div", "00", "time"), ELEM.create("div", "0", "secs")], "clock");
+    return ELEM.create("div", [ELEM.create("div", "00", "time")], "clock");
 }
 
 export function Buttons(){
     return ELEM.create("div", [ELEM.create("button", "POMO", "pomo-btn"), ELEM.create("button", "BREAK", "break-btn")], "buttons");
+}
+
+export function Progress(){
+    let content = [];
+    for(let i = 0; i < 60; i++){
+        content.push(ELEM.create("div", null, ["progress-bar"]));
+    }
+    return ELEM.create("div", content, "progress");
 }

@@ -1,12 +1,12 @@
 import './style.css';
-import { ELEM, Clock, Buttons } from './ui';
+import { ELEM, Clock, Buttons, Progress } from './ui';
 
 /*SETUP*/
 let main = ELEM.get("main");
-ELEM.add(main, [Clock(), Buttons()]);
+ELEM.add(main, [Clock(), Progress(), Buttons()]);
 
 /*TIMER*/
-export const Timer = (timeTotal, ui, secs) => {
+export const Timer = (timeTotal, ui, bars) => {
     var timeElapsed = 0;
     var actualTime = timeTotal / 60;
     console.log(actualTime);
@@ -23,22 +23,36 @@ export const Timer = (timeTotal, ui, secs) => {
     const stopTimer = () => {
         clearInterval(timer);
     }
-    const setUI = () => {
-        if(timeElapsed < 60){ui.innerHTML = actualTime; secs.innerHTML = timeElapsed;}
+    const setSecs = (reset) => {
+        if(!reset){
+            if(timeElapsed < 60){bars[timeElapsed-1].style.backgroundColor = "rgb(160, 98, 119)";}
+        }
         else{
-            let val = actualTime - Math.floor(timeElapsed/60);
-            secs.innerHTML = timeElapsed - (Math.floor(timeElapsed/60)*60);
-            (val < 10) ? ui.innerHTML = "0" + val : ui.innerHTML = val;
+            let i = timeElapsed - (Math.floor(timeElapsed/60)*60);
+            if(i == 0){
+                bars.forEach(bar =>{
+                    bar.style.backgroundColor = "transparent";
+                })
+            }
+            bars[i].style.backgroundColor = "rgb(160, 98, 119)";
         }
     }
-    return {timeTotal, startTimer, stopTimer};
+    const setUI = () => {
+        if(timeElapsed < 60){ui.innerHTML = actualTime; setSecs(false);}
+        else{
+            let val = actualTime - Math.floor(timeElapsed/60);
+            (val < 10) ? ui.innerHTML = "0" + val : ui.innerHTML = val;
+            setSecs(true);
+        }
+    }
+    return {timeTotal, startTimer, stopTimer, setSecs};
 }
 
 /*EVENTS*/
 let pomoBtn = ELEM.get("#pomo-btn");
 let timeUI = ELEM.get("#time");
-let secsUI = ELEM.get("#secs");
-let timer = Timer(20*60, timeUI, secsUI);
+let progressBars = ELEM.getAll(".progress-bar");
+let timer = Timer(20*60, timeUI, progressBars);
 let pomo = false;
 let brek = false;
 
@@ -46,7 +60,7 @@ function setPomo(){
     if(!pomo){
         pomoBtn.innerHTML = "STOP";
         timeUI.innerHTML = "20";
-        secsUI.innerHTML = "0";
+        timer.setSecs(true);
         timer.startTimer();
         pomo = true;
     }
